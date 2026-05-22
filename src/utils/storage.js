@@ -1,3 +1,5 @@
+import { FEEDBACK_STORAGE_KEY } from '../data/questions'
+
 const STORAGE_KEY = 'dorm_matcher_users'
 const CURRENT_USER_KEY = 'dorm_matcher_current'
 
@@ -77,4 +79,28 @@ export function importData(jsonStr) {
 export function clearAllData() {
   localStorage.removeItem(STORAGE_KEY)
   localStorage.removeItem(CURRENT_USER_KEY)
+  localStorage.removeItem(FEEDBACK_STORAGE_KEY)
+}
+
+export function getFeedback() {
+  try {
+    const data = localStorage.getItem(FEEDBACK_STORAGE_KEY)
+    return data ? JSON.parse(data) : []
+  } catch {
+    return []
+  }
+}
+
+export function addFeedback(feedback) {
+  const feedbacks = getFeedback()
+  feedbacks.push({
+    ...feedback,
+    id: 'fb_' + Date.now(),
+    createdAt: new Date().toISOString()
+  })
+  localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedbacks))
+}
+
+export function clearFeedback() {
+  localStorage.removeItem(FEEDBACK_STORAGE_KEY)
 }

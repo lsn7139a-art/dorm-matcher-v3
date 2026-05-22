@@ -51,6 +51,9 @@
 .match-level {
   font-size: 13px;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .match-score {
@@ -124,6 +127,33 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.tag-success {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.tag-warning {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.tag-info {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.tag-topic {
+  background: #faf5ff;
+  color: #7c3aed;
 }
 
 .conflict-list {
@@ -221,18 +251,443 @@
   letter-spacing: 1px;
 }
 
-.custom-notes {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.test-badge {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid #fcd34d;
 }
 
-.custom-note {
+.tab-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.test-section {
+  animation: fadeIn 0.3s ease;
+}
+
+.dorm-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dorm-card {
+  background: white;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dorm-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.dorm-card.expanded {
+  border-color: var(--primary);
+}
+
+.dorm-card.best-algo {
+  border-color: #f59e0b;
+}
+
+.dorm-card.preferred {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5 0%, #fff 30%);
+}
+
+.dorm-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dorm-rank-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.dorm-card.best-algo .dorm-rank-badge {
+  background: #f59e0b;
+  color: white;
+}
+
+.dorm-card.preferred .dorm-rank-badge {
+  background: #10b981;
+  color: white;
+}
+
+.dorm-card-info {
+  flex: 1;
+}
+
+.dorm-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.algo-best-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #d97706;
+  background: #fef3c7;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.user-prefer-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.dorm-card-desc {
   font-size: 13px;
   color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.dorm-card-score {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.dorm-card-bar {
+  margin-top: 12px;
+}
+
+.dorm-members-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.member-chip {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--bg);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+}
+
+.member-chip.more {
+  background: #eef2ff;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.member-mbti-mini {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary);
+  background: #eef2ff;
+  padding: 1px 5px;
+  border-radius: 6px;
+}
+
+.dorm-detail {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.dorm-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.member-card {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+}
+
+.member-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.member-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.member-score {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.member-tagline {
+  font-size: 12px;
+  color: var(--text-secondary);
   font-style: italic;
-  padding: 8px 12px;
-  background: #f8fafc;
+  margin-top: 6px;
+  padding-left: 2px;
+}
+
+.member-detail {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+
+.game-risk-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.game-risk-tag.low {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.game-risk-tag.medium {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.game-risk-tag.high {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.dorm-prefer-section {
+  margin-top: 20px;
+  padding: 18px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #eff6ff 100%);
+  border-radius: var(--radius);
+  border: 2px dashed #93c5fd;
+}
+
+.prefer-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.prefer-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.prefer-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 12px;
+  border: 2px solid var(--border);
+  background: white;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prefer-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: #eef2ff;
+}
+
+.prefer-btn.selected {
+  border-color: #10b981;
+  background: #ecfdf5;
+}
+
+.prefer-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.prefer-dorm-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prefer-dorm-score {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.feedback-done {
+  margin-top: 20px;
+  padding: 18px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  border-radius: var(--radius);
+  border: 2px solid #86efac;
+  text-align: center;
+}
+
+.feedback-done-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.feedback-done-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 10px;
+}
+
+.feedback-insight {
+  font-size: 13px;
+  color: #92400e;
+  background: #fef3c7;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  border-left: 3px solid var(--primary-light);
+  text-align: left;
+}
+
+.feedback-insight.good {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.my-game-profile {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bridge-tag {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1d4ed8;
+  border: 1px solid #93c5fd;
+}
+
+.compromise-tag {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dorm-bridge-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.bridge-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.bridge-member-chip {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: #dbeafe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #1e40af;
+}
+
+.bridge-type-mini {
+  font-size: 10px;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.member-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.bridge-tag-small {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.compromise-badge {
+  font-size: 11px;
+  font-weight: 600;
 }

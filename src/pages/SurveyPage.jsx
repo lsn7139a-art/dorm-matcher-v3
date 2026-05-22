@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { QUESTIONS, getVisibleQuestions } from '../data/questions'
+import { QUESTIONS, getVisibleQuestions, getDescendantIds, getMbtiQuestionsForSession, DORM_PRIORITIES } from '../data/questions'
 import { getCurrentUser, saveUser, setCurrentUserId, generateId } from '../utils/storage'
 import './SurveyPage.css'
 
@@ -13,6 +13,10 @@ function SurveyPage() {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [direction, setDirection] = useState('next')
   const [needName, setNeedName] = useState(false)
+  const [mbtiQuestions, setMbtiQuestions] = useState([])
+  const [phase, setPhase] = useState('name')
+  const [priorities, setPriorities] = useState([])
+  const [priorityStep, setPriorityStep] = useState(0)
 
   useEffect(() => {
     const user = getCurrentUser()
@@ -20,12 +24,33 @@ function SurveyPage() {
       setName(user.name)
       setAnswers(user.answers || {})
       if (user.customTexts) setCustomTexts(user.customTexts)
+      if (user.priorities) setPriorities(user.priorities)
+      if (user.answers && Object.keys(user.answers).length > 0) {
+        setPhase('survey')
+      } else {
+        setPhase('priority')
+      }
     } else {
       setNeedName(true)
+      setPhase('name')
     }
+    setMbtiQuestions(getMbtiQuestionsForSession())
   }, [])
 
-  const visibleQuestions = useMemo(() => getVisibleQuestions(answers), [answers])
+  const visibleQuestions = useMemo(() => {
+    const base = getVisibleQuestions(answers)
+    const expanded = []
+    for (const q of base) {
+      if (q.type === 'mbti_group') {
+        for (const mq of mbtiQuestions) {
+          expanded.push({ ...mq, isMbtiDynamic: true })
+        }
+      } else {
+        expanded.push(q)
+      }
+    }
+    return expanded
+  }, [answers, mbtiQuestions])
   const totalQuestions = visibleQuestions.length
   const currentQ = visibleQuestions[currentIdx]
   const answeredCount = visibleQuestions.filter(q => answers[q.id] !== undefined).length
@@ -34,6 +59,12 @@ function SurveyPage() {
   const handleAnswer = (questionId, value) => {
     setAnswers(prev => {
       const newAnswers = { ...prev, [questionId]: value }
+      if (prev[questionId] !== value) {
+        const descendantIds = getDescendantIds(questionId)
+        for (const did of descendantIds) {
+          delete newAnswers[did]
+        }
+      }
       return newAnswers
     })
   }
@@ -76,13 +107,40 @@ function SurveyPage() {
     if (user) {
       user.answers = answers
       user.customTexts = customTexts
+      user.priorities = priorities
       saveUser(user)
     } else {
-      const newUser = { id: generateId(), name: name.trim(), answers, customTexts, createdAt: new Date().toISOString() }
+      const newUser = { id: generateId(), name: name.trim(), answers, customTexts, priorities, createdAt: new Date().toISOString() }
       saveUser(newUser)
       setCurrentUserId(newUser.id)
     }
     navigate('/match')
+  }
+
+  const togglePriority = (pid) => {
+    setPriorities(prev => {
+      if (prev.includes(pid)) return prev.filter(p => p !== pid)
+      if (prev.length >= 3) return prev
+      return [...prev, pid]
+    })
+  }
+
+  const movePriorityUp = (idx) => {
+    if (idx <= 0) return
+    setPriorities(prev => {
+      const arr = [...prev]
+      ;[arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]]
+      return arr
+    })
+  }
+
+  const movePriorityDown = (idx) => {
+    if (idx >= priorities.length - 1) return
+    setPriorities(prev => {
+      const arr = [...prev]
+      ;[arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]]
+      return arr
+    })
   }
 
   const isCurrentAnswered = currentQ && (
@@ -94,7 +152,7 @@ function SurveyPage() {
     q.type === 'multi' ? (answers[q.id] || []).length > 0 : answers[q.id] !== undefined
   )
 
-  if (needName && !name) {
+  if (phase === 'name') {
     return (
       <div className="page-container">
         <div className="name-entry fade-in">
@@ -108,16 +166,116 @@ function SurveyPage() {
               placeholder="你的名字..."
               value={name}
               onChange={e => setName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && name.trim() && setNeedName(false)}
+              onKeyDown={e => e.key === 'Enter' && name.trim() && setPhase('priority')}
               maxLength={20}
               autoFocus
             />
             <button
               className="btn btn-primary btn-lg"
-              onClick={() => name.trim() && setNeedName(false)}
+              onClick={() => name.trim() && setPhase('priority')}
               disabled={!name.trim()}
             >
               开始
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (phase === 'priority') {
+    const selectedItems = priorities.map(pid => DORM_PRIORITIES.find(p => p.id === pid)).filter(Boolean)
+    const unselectedItems = DORM_PRIORITIES.filter(p => !priorities.includes(p.id))
+
+    return (
+      <div className="page-container">
+        <div className="priority-page fade-in">
+          <div className="priority-header">
+            <div className="priority-icon">🎯</div>
+            <h2 className="priority-title">你对宿舍最看重什么？</h2>
+            <p className="priority-desc">
+              选择 <strong>最多3项</strong> 你最在意的要求，并按重要程度排序<br/>
+              <span className="priority-hint">这会直接影响你的匹配结果——越靠前的要求权重越高</span>
+            </p>
+          </div>
+
+          {selectedItems.length > 0 && (
+            <div className="priority-selected">
+              <div className="priority-section-label">
+                ✅ 已选择（拖动排序，越靠前越重要）
+              </div>
+              <div className="priority-ranked-list">
+                {selectedItems.map((item, idx) => (
+                  <div key={item.id} className="priority-ranked-item">
+                    <div className="priority-rank-num">{idx + 1}</div>
+                    <div className="priority-ranked-content">
+                      <span className="priority-ranked-icon">{item.icon}</span>
+                      <span className="priority-ranked-label">{item.label}</span>
+                    </div>
+                    <div className="priority-rank-actions">
+                      <button
+                        className="rank-btn"
+                        onClick={() => movePriorityUp(idx)}
+                        disabled={idx === 0}
+                      >↑</button>
+                      <button
+                        className="rank-btn"
+                        onClick={() => movePriorityDown(idx)}
+                        disabled={idx === selectedItems.length - 1}
+                      >↓</button>
+                      <button
+                        className="rank-btn rank-btn-remove"
+                        onClick={() => togglePriority(item.id)}
+                      >✕</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="priority-unselected">
+            <div className="priority-section-label">
+              {selectedItems.length >= 3 ? '已达上限（3项）' : `点击添加（还可选 ${3 - selectedItems.length} 项）`}
+            </div>
+            <div className="priority-grid">
+              {unselectedItems.map(item => (
+                <button
+                  key={item.id}
+                  className="priority-card"
+                  onClick={() => togglePriority(item.id)}
+                  disabled={selectedItems.length >= 3}
+                >
+                  <span className="priority-card-icon">{item.icon}</span>
+                  <span className="priority-card-label">{item.label}</span>
+                  <span className="priority-card-desc">{item.description}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="priority-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setPhase('name')}
+            >
+              ← 返回
+            </button>
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => {
+                if (priorities.length === 0) return
+                setPhase('survey')
+              }}
+              disabled={priorities.length === 0}
+            >
+              确认，开始问卷 →
+            </button>
+            <button
+              className="btn btn-text"
+              onClick={() => setPhase('survey')}
+            >
+              跳过，使用默认权重
             </button>
           </div>
         </div>
