@@ -489,6 +489,8 @@ export function getPriorityWeights(priorities) {
 export const QUESTIONS = [
   {
     id: 'summer_behavior',
+    groupId: 'group_summer',
+    isGroupLeader: true,
     text: '这个暑假你过得怎么样？',
     icon: '☀️',
     options: [
@@ -571,6 +573,8 @@ export const QUESTIONS = [
   },
   {
     id: 'current_vs_summer',
+    groupId: 'group_summer',
+    isGroupLeader: false,
     text: '和暑假相比，你现在的状态？',
     icon: '📊',
     options: [
@@ -610,6 +614,8 @@ export const QUESTIONS = [
   },
   {
     id: 'late_night_scenario',
+    groupId: 'group_sleep_quality',
+    isGroupLeader: false,
     text: '凌晨一点你突然睡不着，你会？',
     icon: '🦉',
     options: [
@@ -627,6 +633,8 @@ export const QUESTIONS = [
   },
   {
     id: 'alarm_reaction',
+    groupId: 'group_sleep_quality',
+    isGroupLeader: false,
     text: '闹钟响了但你不想起，你会？',
     icon: '⏰',
     options: [
@@ -643,6 +651,8 @@ export const QUESTIONS = [
   },
   {
     id: 'bed_time',
+    groupId: 'group_sleep_routine',
+    isGroupLeader: true,
     text: '你通常几点上床？',
     icon: '🛏️',
     options: [
@@ -781,6 +791,8 @@ export const QUESTIONS = [
   },
   {
     id: 'sleep_time',
+    groupId: 'group_sleep_routine',
+    isGroupLeader: false,
     text: '你通常几点真正入睡？',
     icon: '🌙',
     options: [
@@ -797,6 +809,8 @@ export const QUESTIONS = [
   },
   {
     id: 'wake_time',
+    groupId: 'group_sleep_routine',
+    isGroupLeader: false,
     text: '第二天没课的话，你几点自然醒？',
     icon: '☀️',
     options: [
@@ -813,6 +827,8 @@ export const QUESTIONS = [
   },
   {
     id: 'sleep_sensitivity',
+    groupId: 'group_sleep_quality',
+    isGroupLeader: true,
     text: '宿舍有人开灯或说话时，你还能睡着吗？',
     icon: '💡',
     options: [
@@ -829,6 +845,8 @@ export const QUESTIONS = [
   },
   {
     id: 'room_tidy',
+    groupId: 'group_cleanliness',
+    isGroupLeader: true,
     text: '你的桌面和床铺通常是什么状态？',
     icon: '🧹',
     options: [
@@ -846,6 +864,8 @@ export const QUESTIONS = [
   },
   {
     id: 'room_tidy_reversed',
+    groupId: 'group_cleanliness',
+    isGroupLeader: false,
     text: '如果让你室友来描述你的桌面，他们会说？',
     icon: '🪞',
     options: [
@@ -865,6 +885,8 @@ export const QUESTIONS = [
   },
   {
     id: 'shower_freq',
+    groupId: 'group_cleanliness',
+    isGroupLeader: false,
     text: '你多久洗一次澡？',
     icon: '🚿',
     options: [
@@ -880,6 +902,8 @@ export const QUESTIONS = [
   },
   {
     id: 'trash_habit',
+    groupId: 'group_cleanliness',
+    isGroupLeader: false,
     text: '你倒垃圾的节奏是？',
     icon: '🗑️',
     options: [
@@ -895,6 +919,8 @@ export const QUESTIONS = [
   },
   {
     id: 'study_place',
+    groupId: 'group_study',
+    isGroupLeader: true,
     text: '你更习惯在哪里学习？',
     icon: '📚',
     options: [
@@ -911,6 +937,8 @@ export const QUESTIONS = [
   },
   {
     id: 'study_noise',
+    groupId: 'group_study',
+    isGroupLeader: false,
     text: '你在宿舍学习时，室友打游戏看视频你会？',
     icon: '🎧',
     options: [
@@ -926,6 +954,8 @@ export const QUESTIONS = [
   },
   {
     id: 'game_habit',
+    groupId: 'group_gaming',
+    isGroupLeader: true,
     text: '你打游戏吗？',
     icon: '🎮',
     options: [
@@ -1032,6 +1062,8 @@ export const QUESTIONS = [
   },
   {
     id: 'music_video',
+    groupId: 'group_media',
+    isGroupLeader: true,
     text: '你在宿舍听音乐看视频时？',
     icon: '🎵',
     options: [
@@ -1047,6 +1079,8 @@ export const QUESTIONS = [
   },
   {
     id: 'hobby_main',
+    groupId: 'group_media',
+    isGroupLeader: false,
     text: '课余时间你最常做什么？',
     icon: '🎯',
     options: [
@@ -1129,6 +1163,8 @@ export const QUESTIONS = [
   },
   {
     id: 'ac_temp',
+    groupId: 'group_lifestyle',
+    isGroupLeader: true,
     text: '夏天空调你希望开多少度？',
     icon: '❄️',
     options: [
@@ -1145,6 +1181,8 @@ export const QUESTIONS = [
   },
   {
     id: 'smoking',
+    groupId: 'group_lifestyle',
+    isGroupLeader: false,
     text: '你对宿舍里吸烟怎么看？',
     icon: '🚭',
     options: [
@@ -1160,6 +1198,8 @@ export const QUESTIONS = [
   },
   {
     id: 'guest_policy',
+    groupId: 'group_lifestyle',
+    isGroupLeader: false,
     text: '室友带朋友来宿舍，你能接受吗？',
     icon: '🚪',
     options: [
@@ -1175,6 +1215,8 @@ export const QUESTIONS = [
   },
   {
     id: 'mbti_dynamic',
+    groupId: 'group_mbti',
+    isGroupLeader: true,
     text: '🧠 性格探索',
     icon: '🧠',
     type: 'mbti_group',
@@ -1183,6 +1225,8 @@ export const QUESTIONS = [
   },
   {
     id: 'conflict_style',
+    groupId: 'group_conflict',
+    isGroupLeader: true,
     text: '和室友有分歧时，你通常会？',
     icon: '🤝',
     options: [
@@ -1198,6 +1242,8 @@ export const QUESTIONS = [
   },
   {
     id: 'sharing',
+    groupId: 'group_sharing',
+    isGroupLeader: true,
     text: '室友想借你的东西，你的态度是？',
     icon: '📦',
     options: [
@@ -1213,6 +1259,8 @@ export const QUESTIONS = [
   },
   {
     id: 'ideal_dorm',
+    groupId: 'group_ideal',
+    isGroupLeader: true,
     text: '你理想中的宿舍生活是什么样的？',
     icon: '🏡',
     options: [
@@ -1228,6 +1276,8 @@ export const QUESTIONS = [
   },
   {
     id: 'college_expectation',
+    groupId: 'group_college',
+    isGroupLeader: true,
     text: '你对大学生活最期待的是什么？',
     icon: '🎓',
     options: [
@@ -1245,6 +1295,8 @@ export const QUESTIONS = [
   },
   {
     id: 'future_plan',
+    groupId: 'group_future',
+    isGroupLeader: true,
     text: '毕业后你最想做什么？',
     icon: '🚀',
     options: [
@@ -1262,6 +1314,8 @@ export const QUESTIONS = [
   },
   {
     id: 'study_motivation',
+    groupId: 'group_motivation',
+    isGroupLeader: true,
     text: '你上大学的主要动力是什么？',
     icon: '🔥',
     options: [

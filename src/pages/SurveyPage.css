@@ -455,3 +455,50 @@
   padding-top: 20px;
   border-top: 1px solid var(--border);
 }
+
+/* 渐进式问题展开动画 */
+@keyframes questionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question-card {
+  animation: questionFadeIn 0.3s ease-out forwards;
+}
+
+/* 新插入的问题（非组长）的特殊样式 */
+.question-card.expanded-question {
+  border-left: 3px solid var(--primary);
+  background: linear-gradient(to right, rgba(var(--primary-rgb, 99, 102, 241), 0.05), transparent);
+}
+
+/* 进度条容器 - 更新为适配15题 */
+.progress-container {
+  /* 保持原有样式，但可以微调 */
+}
+
+.progress-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.progress-bar {
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 组内后续问题的缩进或标记 */
+.question-card .group-indicator {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text-secondary, #6b7280);
+  background: var(--surface, #f9fafb);
+  border-radius: 10px;
+  margin-left: 8px;
+}
