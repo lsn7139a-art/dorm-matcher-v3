@@ -5,6 +5,23 @@ import { getCurrentUser, saveUser, setCurrentUserId, generateId } from '../utils
 import { createUser as apiCreateUser } from '../utils/api'
 import './SurveyPage.css'
 
+function getVisualLeaderQuestions() {
+  return QUESTIONS.filter(q => q.isGroupLeader === true)
+}
+
+function getQuestionsInGroup(groupId) {
+  return QUESTIONS.filter(q => q.groupId === groupId)
+}
+
+function getNextUnansweredInGroup(groupId, answers) {
+  const groupQuestions = getQuestionsInGroup(groupId)
+  const currentIndex = groupQuestions.findIndex(q =>
+    answers[q.id] === undefined
+  )
+  if (currentIndex === -1) return null
+  return groupQuestions[currentIndex]
+}
+
 function SurveyPage() {
   const navigate = useNavigate()
   const [name, setName] = useState('')
@@ -18,6 +35,9 @@ function SurveyPage() {
   const [phase, setPhase] = useState('name')
   const [priorities, setPriorities] = useState([])
   const [priorityStep, setPriorityStep] = useState(0)
+  const [visibleQueue, setVisibleQueue] = useState(() => {
+    return getVisualLeaderQuestions().map(q => q.id)
+  })
 
   useEffect(() => {
     const user = getCurrentUser()
@@ -39,23 +59,29 @@ function SurveyPage() {
   }, [])
 
   const visibleQuestions = useMemo(() => {
-    const base = getVisibleQuestions(answers)
     const expanded = []
-    for (const q of base) {
-      if (q.type === 'mbti_group') {
-        for (const mq of mbtiQuestions) {
-          expanded.push({ ...mq, isMbtiDynamic: true })
+    for (const qId of visibleQueue) {
+      const q = QUESTIONS.find(q => q.id === qId)
+      if (q) {
+        if (q.type === 'mbti_group') {
+          for (const mq of mbtiQuestions) {
+            expanded.push({ ...mq, isMbtiDynamic: true })
+          }
+        } else {
+          expanded.push(q)
         }
-      } else {
-        expanded.push(q)
       }
     }
     return expanded
-  }, [answers, mbtiQuestions])
-  const totalQuestions = visibleQuestions.length
+  }, [visibleQueue, mbtiQuestions])
+  const totalQuestions = getVisualLeaderQuestions().length
   const currentQ = visibleQuestions[currentIdx]
-  const answeredCount = visibleQuestions.filter(q => answers[q.id] !== undefined).length
-  const progress = Math.round((answeredCount / totalQuestions) * 100)
+  const visualLeaders = getVisualLeaderQuestions()
+  const answeredLeadersCount = visualLeaders.filter(q => {
+    const groupQuestions = getQuestionsInGroup(q.groupId)
+    return groupQuestions.every(gq => answers[gq.id] !== undefined)
+  }).length
+  const progress = Math.round((answeredLeadersCount / totalQuestions) * 100)
 
   const handleAnswer = (questionId, value) => {
     setAnswers(prev => {
@@ -68,6 +94,21 @@ function SurveyPage() {
       }
       return newAnswers
     })
+    handleAnswerWithExpansion(questionId, value)
+  }
+
+  const handleAnswerWithExpansion = (questionId) => {
+    const currentQuestion = QUESTIONS.find(q => q.id === questionId)
+    if (!currentQuestion || !currentQuestion.groupId) return
+    const nextQ = getNextUnansweredInGroup(currentQuestion.groupId, answers)
+    if (nextQ && !visibleQueue.includes(nextQ.id)) {
+      const currentIdx = visibleQueue.indexOf(questionId)
+      setVisibleQueue(prev => {
+        const newQueue = [...prev]
+        newQueue.splice(currentIdx + 1, 0, nextQ.id)
+        return newQueue
+      })
+    }
   }
 
   const handleMultiAnswer = (questionId, value) => {
@@ -89,7 +130,7 @@ function SurveyPage() {
   }
 
   const goNext = () => {
-    if (currentIdx < totalQuestions - 1) {
+    if (currentIdx < visibleQuestions.length - 1) {
       setDirection('next')
       setCurrentIdx(prev => prev + 1)
     }
@@ -161,7 +202,7 @@ function SurveyPage() {
       ? (answers[currentQ.id] || []).length > 0
       : answers[currentQ.id] !== undefined
   )
-  const allComplete = visibleQuestions.every(q =>
+  const allComplete = QUESTIONS.every(q =>
     q.type === 'multi' ? (answers[q.id] || []).length > 0 : answers[q.id] !== undefined
   )
 
@@ -302,7 +343,7 @@ function SurveyPage() {
     <div className="page-container survey-flow">
       <div className="survey-progress">
         <div className="progress-info">
-          <span>{answeredCount}/{totalQuestions}</span>
+          <span>{answeredLeadersCount}/{totalQuestions}</span>
           <span>{progress}%</span>
         </div>
         <div className="progress-bar">
@@ -387,9 +428,9 @@ function SurveyPage() {
           ← 上一题
         </button>
 
-        <span className="flow-counter">{currentIdx + 1} / {totalQuestions}</span>
+        <span className="flow-counter">{currentIdx + 1} / {visibleQuestions.length}</span>
 
-        {currentIdx < totalQuestions - 1 ? (
+        {currentIdx < visibleQuestions.length - 1 ? (
           <button
             className="btn btn-primary"
             onClick={goNext}
