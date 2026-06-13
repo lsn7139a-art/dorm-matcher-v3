@@ -5,6 +5,7 @@ import SurveyPage from './pages/SurveyPage'
 import MatchPage from './pages/MatchPage'
 import ProfilePage from './pages/ProfilePage'
 import GroupMatchPage from './pages/GroupMatchPage'
+import GroupManagementPage from './pages/GroupManagementPage'
 import { getCurrentUser } from './utils/storage'
 import './App.css'
 
@@ -38,7 +39,10 @@ function App() {
                 匹配
               </NavLink>
               <NavLink to="/group" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                群组
+                群组匹配
+              </NavLink>
+              <NavLink to="/manage" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                分组管理
               </NavLink>
               {currentUser && (
                 <NavLink to="/profile" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
@@ -57,6 +61,7 @@ function App() {
           <Route path="/match" element={<MatchPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/group" element={<GroupMatchPage />} />
+          <Route path="/manage" element={<GroupManagementPage />} />
         </Routes>
       </main>
     </div>

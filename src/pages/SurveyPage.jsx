@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { QUESTIONS, getVisibleQuestions, getDescendantIds, getMbtiQuestionsForSession, DORM_PRIORITIES } from '../data/questions'
 import { getCurrentUser, saveUser, setCurrentUserId, generateId } from '../utils/storage'
+import { createUser as apiCreateUser } from '../utils/api'
 import './SurveyPage.css'
 
 function SurveyPage() {
@@ -101,19 +102,31 @@ function SurveyPage() {
     }
   }
 
-  const handleSubmit = () => {
+  const [isUploading, setIsUploading] = useState(false)
+
+  const handleSubmit = async () => {
     if (!name.trim()) return
+    setIsUploading(true)
+    
     const user = getCurrentUser()
+    let localUser
+    
     if (user) {
       user.answers = answers
       user.customTexts = customTexts
       user.priorities = priorities
       saveUser(user)
+      localUser = user
     } else {
       const newUser = { id: generateId(), name: name.trim(), answers, customTexts, priorities, createdAt: new Date().toISOString() }
       saveUser(newUser)
       setCurrentUserId(newUser.id)
+      localUser = newUser
     }
+    
+    await apiCreateUser(localUser.name, localUser.answers, localUser.priorities)
+    
+    setIsUploading(false)
     navigate('/match')
   }
 
@@ -388,9 +401,9 @@ function SurveyPage() {
           <button
             className="btn btn-primary btn-lg"
             onClick={handleSubmit}
-            disabled={!allComplete}
+            disabled={!allComplete || isUploading}
           >
-            ✨ 完成
+            {isUploading ? '⏳ 上传中...' : '✨ 完成'}
           </button>
         )}
       </div>

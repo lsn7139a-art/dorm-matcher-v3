@@ -1,0 +1,70 @@
+[
+  {
+    "id": "user_1779866671201_8rrkc3",
+    "name": "lsn",
+    "answers": {
+      "summer_behavior": 2,
+      "summer_why_wild": 2,
+      "current_vs_summer": 0,
+      "why_no_change": 1,
+      "late_night_scenario": 0,
+      "alarm_reaction": 1,
+      "bed_time": 4,
+      "bed_activity": 2,
+      "bed_music_habit": 0,
+      "sleep_time": 4,
+      "wake_time": 3,
+      "sleep_sensitivity": 1,
+      "room_tidy": 0,
+      "room_tidy_reversed": 3,
+      "shower_freq": 1,
+      "trash_habit": 0,
+      "study_place": 1,
+      "study_noise": 0,
+      "game_habit": 1,
+      "game_types": [
+        "strategy",
+        "fps"
+      ],
+      "game_duration": 1,
+      "game_motivation": 2,
+      "game_self_control": 2,
+      "game_voice": 1,
+      "music_video": 1,
+      "hobby_main": 1,
+      "hobby_content": [
+        "sports",
+        "music"
+      ],
+      "chat_topic": [
+        "movie",
+        "study"
+      ],
+      "free_time": 2,
+      "ac_temp": 2,
+      "smoking": 0,
+      "guest_policy": 2,
+      "mbti_ei_4": 1,
+      "mbti_ei_2": 3,
+      "mbti_sn_4": 1,
+      "mbti_sn_5": 1,
+      "mbti_tf_4": 1,
+      "mbti_tf_1": 0,
+      "mbti_jp_1": 2,
+      "mbti_jp_3": 1,
+      "conflict_style": 1,
+      "sharing": 1,
+      "ideal_dorm": 2,
+      "college_expectation": 1,
+      "future_plan": 1,
+      "study_motivation": 1
+    },
+    "priorities": [
+      "sleep_schedule",
+      "quiet",
+      "studying"
+    ],
+    "createdAt": "2026-05-27T07:24:31.201Z",
+    "uploadedAt": "2026-05-27T07:24:31.201Z"
+  }
+]
